@@ -1,9 +1,6 @@
 package main
 
-import (
-	"bufio"
-	"os"
-)
+import "fmt"
 
 func findTheLastSpaceOrStop(message []byte, startIndex int) int {
 	for i := startIndex; i < len(message); i++ {
@@ -19,10 +16,7 @@ func findTheLastSpaceOrStop(message []byte, startIndex int) int {
 
 const httpConst string = "http://"
 
-func CatchHttp(message string) string {
-	httpBytes := []byte(httpConst)
-	bufMes := []byte(message)
-
+func changeLinkToStars(bufMes []byte, httpBytes []byte) {
 	for i := 0; i < len(bufMes); i++ {
 		for _, val := range httpBytes {
 			if val == bufMes[i] {
@@ -35,13 +29,16 @@ func CatchHttp(message string) string {
 		}
 
 	}
+}
+
+func CatchHttp(message string) string {
+	httpBytes := []byte(httpConst)
+	bufMes := []byte(message)
+	changeLinkToStars(bufMes, httpBytes)
 	return string(bufMes)
 }
 
 func main() {
-	var stroka string
-	scanner := bufio.NewScanner(os.Stdin)
-	scanner.Scan()
-	stroka = scanner.Text()
-	CatchHttp(stroka)
+	var stroka string = "Here's my spammy page: http://hehefouls.netHAHAHA see you."
+	fmt.Println(CatchHttp(stroka))
 }
