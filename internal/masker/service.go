@@ -1,5 +1,22 @@
 package masker
 
+import "os"
+
+type Service struct {
+	prod producer
+	pres presenter
+}
+
+func NewService(producer, presenter) *Service {
+	return &Service{
+		prod: NewDataProducer(getPathFromArgs()),
+	}
+}
+
+func getPathFromArgs() string {
+	return os.Args[1]
+}
+
 func findTheLastSpaceOrStop(message []byte, startIndex int) int {
 	for i := startIndex; i < len(message); i++ {
 		if i == len(message)-1 {
@@ -29,7 +46,7 @@ func changeLinkToStars(bufMes []byte, httpBytes []byte) {
 	}
 }
 
-func CatchHttp(message string) string {
+func (s *Service) CatchHttp(message string) string {
 	httpBytes := []byte(httpConst)
 	bufMes := []byte(message)
 	changeLinkToStars(bufMes, httpBytes)

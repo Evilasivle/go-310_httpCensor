@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"testing"
+
+	"igaleksus.com/spamMasker/internal/masker"
+)
 
 func TestCatchHttp(t *testing.T) {
 	testCases := [5]string{}
@@ -19,7 +23,7 @@ func TestCatchHttp(t *testing.T) {
 	}
 
 	for index, val := range testCases {
-		result := CatchHttp(val)
+		result := masker.CatchHttp(val)
 		if result != rightOutput[index] {
 			t.Errorf("CatchHttp %s, ожидалось %s, получилось %s", val, rightOutput[index], result)
 		}
