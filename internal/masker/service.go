@@ -1,20 +1,41 @@
 package masker
 
-import "os"
+import (
+	"fmt"
+	"os"
+	"strings"
+)
 
 type Service struct {
 	prod producer
 	pres presenter
 }
 
-func NewService(producer, presenter) *Service {
+func NewService() *Service {
 	return &Service{
 		prod: NewDataProducer(getPathFromArgs()),
+		pres: NewDataPresenter("maskedStrings.txt"),
 	}
 }
 
+func (s *Service) Run() {
+	spam, err := s.prod.produce()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	result := strings.Join(spam, "")
+	maskedStrings := make([]string, 0)
+	maskedStrings = append(maskedStrings, s.CatchHttp(result))
+
+	fmt.Println(maskedStrings)
+	s.pres.present(maskedStrings)
+}
+
 func getPathFromArgs() string {
-	return os.Args[1]
+	if len(os.Args) > 1 {
+		return os.Args[1]
+	}
+	return "stringsToMask.txt"
 }
 
 func findTheLastSpaceOrStop(message []byte, startIndex int) int {
